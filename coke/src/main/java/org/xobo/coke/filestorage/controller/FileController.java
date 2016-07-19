@@ -117,20 +117,13 @@ public class FileController {
     response.setHeader("Cache-Control", "max-age=31556926");
     response.setHeader("Content-Disposition",
         String.format("attachment; filename=\"%1$s\"; filename*=utf-8''%1$s", encodFilename));
-
-    InputStream inputStream = fileService.getInputStream(cokeFileInfo);
-    if (inputStream == null) {
-      findNotFound(response, fileNo);
-    }
-
-    OutputStream outputStream = null;
-    try {
-      outputStream = response.getOutputStream();
+    try (InputStream inputStream = fileService.getInputStream(cokeFileInfo);
+    		OutputStream outputStream = response.getOutputStream();){
+      if (inputStream == null) {
+        findNotFound(response, fileNo);
+      }
       IOUtils.copy(inputStream, outputStream);
     } catch (FileNotFoundException fne) {
-    } finally {
-      IOUtils.closeQuietly(inputStream);
-      IOUtils.closeQuietly(outputStream);
     }
   }
 

@@ -1,6 +1,5 @@
 package org.xobo.coke.utility;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.security.MessageDigest;
 
