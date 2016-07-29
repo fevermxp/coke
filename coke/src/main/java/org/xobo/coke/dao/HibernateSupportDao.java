@@ -360,7 +360,7 @@ public class HibernateSupportDao<K> extends HibernateDao {
     deleteEntity(getSession(), baseEntity, user);
   }
 
-  public void insertEntity(Session session, IBase<?> baseEntity, IUser user) {
+  public void insertEntity(Session session, IBase<K> baseEntity, IUser user) {
     if (user == null) {
       user = ContextHolder.getLoginUser();
     }
@@ -526,7 +526,7 @@ public class HibernateSupportDao<K> extends HibernateDao {
     }
   }
 
-  public <T> void manualSave(IBase<T> entity, IUser user) {
+  public void manualSave(IBase<K> entity, IUser user) {
     Session session = getSessionFactory().openSession();
     Transaction transaction = session.beginTransaction();
     try {
