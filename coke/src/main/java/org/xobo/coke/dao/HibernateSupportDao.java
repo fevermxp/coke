@@ -25,6 +25,7 @@ import org.xobo.coke.entity.PersistWrapper;
 import org.xobo.coke.entity.ReferenceWrapper;
 import org.xobo.coke.model.Company;
 import org.xobo.coke.model.IBase;
+import org.xobo.coke.model.IBaseGeneratAble;
 import org.xobo.coke.model.IDetail;
 import org.xobo.coke.model.PathModel;
 import org.xobo.coke.querysupporter.model.PropertyWrapper;
@@ -366,6 +367,10 @@ public class HibernateSupportDao<K> extends HibernateDao {
     }
     if (baseEntity instanceof Company) {
       ((Company) baseEntity).setCompanyId(user.getCompanyId());
+    }
+    
+    if(baseEntity instanceof IBaseGeneratAble){
+    	((IBaseGeneratAble)baseEntity).GeneratId();
     }
 
     baseEntity.setCreateUser(user.getUsername());
