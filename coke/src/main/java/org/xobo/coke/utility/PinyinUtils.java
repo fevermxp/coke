@@ -54,8 +54,5 @@ public class PinyinUtils {
 
   public static void main(String[] args) {
     toPinyin("茜乐的");
-    toPinyin("茜茜");
-    toPinyin("周兵");
-    toPinyin("的士");
   }
 }
