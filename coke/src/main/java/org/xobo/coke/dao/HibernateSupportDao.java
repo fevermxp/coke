@@ -214,23 +214,25 @@ public class HibernateSupportDao<K> extends HibernateDao {
   }
 
   public void persistEntity(IBase<K> entity) {
-    persistEntity(entity, null, null);
+    persistEntity(null,entity, null, null);
   }
 
   public void persistEntity(IBase<K> entity,
       PersistWrapper persistWrapper) {
-    persistEntity(entity, null, persistWrapper);
+    persistEntity(null,entity, null, persistWrapper);
   }
   
   @SuppressWarnings("unchecked")
-  public void persistEntity(IBase<K> entity, IBase<K> parent,
+  public void persistEntity(Session session,IBase<K> entity, IBase<K> parent,
 	      PersistWrapper persistWrapper) {
     if (entity == null){
       return;
     }
 
     IUser user = ContextHolder.getLoginUser();
-    Session session = this.getSession();
+    if(session==null){
+    	session = this.getSession();
+    }
 
     @SuppressWarnings("rawtypes")
     PersistAction persistAction = null;
@@ -277,52 +279,16 @@ public class HibernateSupportDao<K> extends HibernateDao {
     persistEntities(entites, null, persistWrapper);
   }
 
-  @SuppressWarnings("unchecked")
   public void persistEntities(Collection<? extends IBase<K>> entites, IBase<K> parent,
       PersistWrapper persistWrapper) {
     if (CollectionUtils.isEmpty(entites)) {
       return;
     }
-
-    IUser user = ContextHolder.getLoginUser();
+    //IUser user = ContextHolder.getLoginUser();
     Session session = this.getSession();
 
-    @SuppressWarnings("rawtypes")
-    PersistAction persistAction = null;
     for (IBase<K> entity : entites) {
-
-      if (persistAction == null && persistWrapper != null) {
-        persistAction = persistWrapper.getPersistAction(entity);
-      } else {
-        persistAction = new NopPersistAction();
-      }
-
-      EntityState entityState = EntityUtils.getState(entity);
-
-      if (EntityState.NEW == entityState) {
-        setParentId(session, entity, parent);
-        String companyId = user.getCompanyId();
-        if (entity instanceof Company) {
-          ((Company) entity).setCompanyId(companyId);
-        }
-        persistAction.beforeCreate(session, entity, parent);
-        insertEntity(session, entity, user);
-        persistAction.afterCreate(session, entity, parent);
-      } else if (EntityState.MODIFIED == entityState || EntityState.MOVED == entityState) {
-        setParentId(session, entity, parent);
-        persistAction.beforeUpdate(session, entity, parent);
-        updateEntity(session, entity, user);
-      } else if (EntityState.DELETED == entityState) {
-        persistAction.beforeDelete(session, entity, parent);
-        deleteEntity(session, entity, user);
-      }
-
-      if (EntityState.DELETED != entityState) {
-        saveChildren(entity, persistWrapper);
-      } else {
-        deleteChildren(session, entity, persistWrapper);
-      }
-
+    	persistEntity(session, entity, parent,persistWrapper);
     }
   }
 
