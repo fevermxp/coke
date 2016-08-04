@@ -1,6 +1,8 @@
 # coke
 基于BDF的辅助工具包---forked from cnxobo/coke
 ##分支更新记录：
+###0.0.11更新
+* HibernateSupportDao增加单个实体增删改方法persistEntity(IBase<K> entity)、persistEntity(IBase<K> entity,PersistWrapper persistWrapper)、persistEntity(IBase<K> entity, IBase<K> parent,PersistWrapper persistWrapper)
 ###0.0.10更新
 * 支持获取部门key-value转换，使用方法，在DataType上需要转换的字段mapping属性mapValues设置为${coke.dict.lookup("coke.depts",arg1)}，参数arg1代表部门表的实体名称，空值即为bdf默认的DefaultDept。实体需要实现IDept接口。
 
