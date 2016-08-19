@@ -23,6 +23,9 @@ import org.xobo.coke.filestorage.domain.CokeFileInfo;
 import org.xobo.coke.filestorage.service.FileStorageProvider;
 import org.xobo.coke.filestorage.service.FileStorageService;
 
+import com.bstek.bdf2.core.business.IUser;
+import com.bstek.bdf2.core.context.ContextHolder;
+
 @Service(FileStorageService.BEAN_ID)
 public class FileStorageServiceImpl implements FileStorageService {
   private Map<String, FileStorageProvider> fileStorageProviderMap =
@@ -49,6 +52,10 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   public CokeFileInfo saveFile(String fileStorageType, String relativePath, String filename) {
     CokeFileInfo fileInfo = new CokeFileInfo();
+    IUser _user = ContextHolder.getLoginUser();
+    if(_user!=null){
+    	fileInfo.setCreateBy(_user.getUsername());
+    }
     fileInfo.setFilename(filename);
     fileInfo.setCreateTime(new Date());
     fileInfo.setFileNo(UUID.randomUUID().toString());
