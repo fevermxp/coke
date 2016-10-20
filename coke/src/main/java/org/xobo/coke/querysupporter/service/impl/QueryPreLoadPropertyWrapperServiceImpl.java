@@ -105,7 +105,7 @@ public class QueryPreLoadPropertyWrapperServiceImpl implements QueryPropertyWrap
     return propertyDataType;
   }
 
-  public static final String[] initOperator = new String[] { /* "eq", */"ge", "gt", "in", "le",
+  public static final String[] initOperator = new String[] { "eq","ge", "gt", "in", "le",
       "like", "likeEnd", "lt", "ne", "between"};
 
   @Override

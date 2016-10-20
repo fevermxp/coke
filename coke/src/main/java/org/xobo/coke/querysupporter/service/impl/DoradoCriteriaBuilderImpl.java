@@ -19,7 +19,6 @@ import com.bstek.dorado.data.provider.Criteria;
 import com.bstek.dorado.data.provider.Criterion;
 import com.bstek.dorado.data.provider.filter.FilterOperator;
 import com.bstek.dorado.data.provider.filter.SingleValueFilterCriterion;
-import com.bstek.dorado.data.type.StringDataType;
 
 @Service(DoradoCriteriaBuilderImpl.BEAN_ID)
 public class DoradoCriteriaBuilderImpl implements DoradoCriteriaBuilder {
@@ -60,18 +59,18 @@ public class DoradoCriteriaBuilderImpl implements DoradoCriteriaBuilder {
         if (propertyWrapper != null) { // process own property
 
           SingleValueFilterCriterion criterion = new SingleValueFilterCriterion();
-          if (propertyWrapper.isAutoCreate()
+          /*if (propertyWrapper.isAutoCreate()
               && propertyWrapper.getDataType() instanceof StringDataType
               && property.indexOf(QueryPropertyWrapperService.PROPERTY_OPERATOR_SPLITER) == -1) {
             criterion.setProperty(propertyWrapper.getProperty());
             criterion.setFilterOperator(FilterOperator.like);
             value = parseQueryKeyword(value.toString());
-          } else {
+          } else {*/
             criterion = new SingleValueFilterCriterion();
             criterion.setProperty(propertyWrapper.getProperty());
             criterion.setFilterOperator(propertyWrapper.getFilterOperator());
             value = propertyWrapper.parseValue(value);
-          }
+          /*}*/
 
           if (value instanceof Date) {
             if (FilterOperator.le == propertyWrapper.getFilterOperator()) {

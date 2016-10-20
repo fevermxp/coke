@@ -20,6 +20,7 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.ResultTransformer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.xobo.coke.entity.PersistWrapper;
 import org.xobo.coke.entity.ReferenceWrapper;
@@ -319,12 +320,24 @@ public class HibernateSupportDao<K> extends HibernateDao {
     if (properties != null && !properties.isEmpty()) {
       for (ReferenceWrapper property : properties) {
         Class<?> childClass = property.getClazz();
-        if (IDetail.class.isAssignableFrom(childClass)) {
-          result =
-              session
-                  .createQuery("delete " + childClass.getName() + " c where c.parentId = :parentId")
-                  .setParameter("parentId", parent.getId()).executeUpdate();
-        }
+        try {
+		  Object o = childClass.newInstance();
+		  if (o instanceof IDetail<?>) {
+			String parentIdName = ((IDetail<?>) o).getParentIdName()==null?"c.parentId":"c."+((IDetail<?>) o).getParentIdName();
+		    result =
+		        session
+		            .createQuery("delete " + childClass.getName() + " c where "+parentIdName+" = :parentId")
+		            .setParameter("parentId", parent.getId()).executeUpdate();
+		  }
+		  /*if (IDetail.class.isAssignableFrom(childClass)) {
+		    result =
+		        session
+		            .createQuery("delete " + childClass.getName() + " c where c.parentId = :parentId")
+		            .setParameter("parentId", parent.getId()).executeUpdate();
+		  }*/
+        } catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
       }
     }
     return result;
@@ -447,14 +460,21 @@ public class HibernateSupportDao<K> extends HibernateDao {
     baseEntity.setDeleted(false);
     session.saveOrUpdate(baseEntity);
   }
-
+  @Value("${coke.isHardDelete:}")
+  private Boolean isHardDelete;
+  
   public void deleteEntity(Session session, IBase<?> baseEntity, IUser user) {
     if (user == null) {
       user = ContextHolder.getLoginUser();
     }
     baseEntity.setUpdateUser(user.getUsername());
     baseEntity.setUpdateDate(new Date());
-    session.delete(baseEntity);
+    baseEntity.setDeleted(true);
+    if(isHardDelete==null||isHardDelete){
+    	session.delete(baseEntity);
+    }else{
+    	session.saveOrUpdate(baseEntity);
+    }
   }
 
   @SuppressWarnings("unchecked")

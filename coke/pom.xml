@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.xobo</groupId>
-	<version>0.0.12-SNAPSHOT</version>
+	<version>0.0.13-SNAPSHOT</version>
 	<artifactId>coke</artifactId>
 	<dependencies>
 		<dependency>
@@ -184,14 +184,14 @@
 	</pluginRepositories>
 	<distributionManagement>
 		<repository>
-			<id>deployment</id>
-			<name>Internal Releases</name>
-			<url>http://172.16.0.13:8081/nexus/content/repositories/releases/</url>
+			<id>deployment-releases</id>
+			<name>Internal releases</name>
+			<url>http://192.168.100.156:8081/nexus/content/repositories/releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>deployment</id>
-			<name>Internal Releases</name>
-			<url>http://172.16.0.13:8081/nexus/content/repositories/snapshots/</url>
+			<id>deployment-snapshots</id>
+			<name>Internal snapshots</name>
+			<url>http://192.168.100.156:8081/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<properties>

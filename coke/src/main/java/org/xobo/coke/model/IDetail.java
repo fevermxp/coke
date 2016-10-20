@@ -7,4 +7,5 @@ public interface IDetail<T> extends IBase<T> {
 
   T getRoot();
 
+  String getParentIdName();
 }
